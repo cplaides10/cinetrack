@@ -268,7 +268,7 @@ export default function CineTrack() {
       setLoading(true);
       const [{ data:mv },{ data:ls },{ data:lm },{ data:gn }] = await Promise.all([
         sb.from("movies").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:true}),
-        sb.from("listas").select("*").order("created_at"),
+        sb.from("lists").select("*").order("created_at"),
         sb.from("list_movies").select("*"),
         sb.from("genres").select("*"),
       ]);
@@ -342,12 +342,12 @@ export default function CineTrack() {
 
   const createList = async () => {
     if(!newListName.trim()) return;
-    const {data:nl}=await sb.from("listas").insert({name:newListName,description:newListDesc}).select().single();
+    const {data:nl}=await sb.from("lists").insert({name:newListName,description:newListDesc}).select().single();
     if(nl){ setLists(p=>[...p,{...nl,movieIds:[]}]); setNewListName(""); setNewListDesc(""); setShowListModal(false); setTab("listas"); setActiveList(nl.id); setShowSidebar(false); }
   };
 
   const deleteList = async (id) => {
-    await sb.from("listas").delete().eq("id",id);
+    await sb.from("lists").delete().eq("id",id);
     setLists(p=>p.filter(l=>l.id!==id));
     if(activeList===id) setActiveList(null);
   };
